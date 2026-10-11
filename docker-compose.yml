@@ -1,0 +1,10 @@
+services:
+  polybot:
+    build: .
+    # Paper trading. For real money use: command: ["run", "--live"]
+    command: ["run"]
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped

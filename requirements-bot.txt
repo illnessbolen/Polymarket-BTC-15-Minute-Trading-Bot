@@ -1,0 +1,7 @@
+# Dependencies for polybot (python -m polybot). The NautilusTrader-based bot.py
+# keeps using requirements.txt; polybot does not need NautilusTrader or Redis.
+httpx>=0.27,<1
+loguru>=0.7,<1
+python-dotenv>=1.0,<2
+# Only used in live mode (python -m polybot run --live)
+py-clob-client>=0.34.5,<0.35
