@@ -110,6 +110,16 @@ class OrderBookImbalanceProcessor(BaseSignalProcessor):
             logger.warning(f"OrderBook fetch failed for {token_id[:16]}…: {e}")
             return None
 
+    @staticmethod
+    def _best_first(levels: List[Dict], highest_first: bool) -> List[Dict]:
+        """Sort price levels so the best price comes first."""
+        def price(level: Dict) -> float:
+            try:
+                return float(level.get("price", 0))
+            except (TypeError, ValueError):
+                return 0.0
+        return sorted(levels, key=price, reverse=highest_first)
+
     def _parse_levels(self, levels: List[Dict]) -> float:
         """Sum total volume across price levels (returns USD volume)."""
         total = 0.0
@@ -156,8 +166,11 @@ class OrderBookImbalanceProcessor(BaseSignalProcessor):
             if not book:
                 return None
 
-            bids = book.get("bids", [])
-            asks = book.get("asks", [])
+            # The CLOB returns bids ascending and asks descending (best price
+            # LAST), so sort best-first before taking the top levels —
+            # otherwise we'd measure the 1¢/99¢ levels far from the market.
+            bids = self._best_first(book.get("bids", []), highest_first=True)
+            asks = self._best_first(book.get("asks", []), highest_first=False)
 
             bid_volume = self._parse_levels(bids)
             ask_volume = self._parse_levels(asks)

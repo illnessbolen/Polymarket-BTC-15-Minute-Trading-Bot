@@ -9,6 +9,8 @@
 .env.production
 .env.development
 *.env
+# ...but the template with no secrets is meant to be committed
+!.env.example
 
 # Any file with "secret", "private", "key", "credential" in the name
 *secret*
@@ -80,6 +82,7 @@ logs/
 nautilus_logs/
 
 # Bot state files
+data/
 bot_state.json
 last_trade.json
 

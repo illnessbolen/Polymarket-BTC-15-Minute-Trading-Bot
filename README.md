@@ -9,6 +9,17 @@
 
 A production-grade algorithmic trading bot for **Polymarket's 15-minute BTC price prediction markets**. Built with a 7-phase architecture combining multiple signal sources, professional risk management, and self-learning capabilities.
 
+> **New: Polybot** — a standalone version of this bot with Telegram control (`python -m polybot`).
+> Same strategy and signal processors, but it talks to Polymarket directly (no NautilusTrader,
+> patches or Redis), paper-trades against the real order book with real fees and real market
+> outcomes, and runs in Docker. Setup guide (in Russian): [POLYBOT.md](POLYBOT.md).
+>
+> ```bash
+> pip install -r requirements-bot.txt && cp .env.example .env
+> python -m polybot check   # verify APIs / Telegram
+> python -m polybot run     # paper trading; add --live for real orders
+> ```
+
 
 ---
 
